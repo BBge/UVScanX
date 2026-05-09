@@ -7,16 +7,6 @@
     "dropbearmulti",
     "dbclient"
   ],
-  "version_hints": [
-    {
-      "pattern": "Dropbear[^0-9]*([0-9]{4}\\.[0-9]+|[0-9]+\\.[0-9.]+)",
-      "evidence": "Dropbear version banner"
-    },
-    {
-      "pattern": "dropbearmulti",
-      "evidence": "multi-call binary marker"
-    }
-  ],
   "sources": [
     {
       "title": "Dropbear SSH project",
@@ -33,14 +23,13 @@
     {
       "id": "dropbear-component-id",
       "type": "component_only",
-      "expected": "Identify Dropbear/dropbearmulti version banners. Do not report API misuse without concrete symbol-level internal API evidence.",
+      "expected": "Identify Dropbear/dropbearmulti component banners. Do not report API misuse without concrete symbol-level internal API evidence.",
       "evidence_summary": "Dropbear is normally shipped as SSH server/client applications in firmware rather than as a public C API.",
       "source_url": "https://matt.ucc.asn.au/dropbear/dropbear.html",
       "confidence": 0.9,
       "active": false,
       "tags": [
-        "component",
-        "version"
+        "component"
       ]
     },
     {

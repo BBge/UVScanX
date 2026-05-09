@@ -7,16 +7,6 @@
     "ssh-keygen",
     "libssh.a"
   ],
-  "version_hints": [
-    {
-      "pattern": "OpenSSH[_ -]([0-9][A-Za-z0-9.p_\\-]*)",
-      "evidence": "OpenSSH version banner"
-    },
-    {
-      "pattern": "sshd: OpenSSH[_ -]([0-9][A-Za-z0-9.p_\\-]*)",
-      "evidence": "sshd banner"
-    }
-  ],
   "sources": [
     {
       "title": "OpenSSH portable project",
@@ -33,14 +23,13 @@
     {
       "id": "openssh-component-id",
       "type": "component_only",
-      "expected": "Identify OpenSSH/sshd version banners; do not report API misuse without concrete internal-symbol evidence.",
+      "expected": "Identify OpenSSH/sshd component banners; do not report API misuse without concrete internal-symbol evidence.",
       "evidence_summary": "OpenSSH is normally shipped as applications/daemons in firmware rather than as a stable public C API.",
       "source_url": "https://www.openssh.com/portable.html",
       "confidence": 0.86,
       "active": false,
       "tags": [
-        "component",
-        "version"
+        "component"
       ]
     },
     {

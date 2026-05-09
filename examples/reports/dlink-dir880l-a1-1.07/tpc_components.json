@@ -1,0 +1,53 @@
+{
+  "num_binaries": 335,
+  "components": [
+    {
+      "name": "BusyBox",
+      "max_confidence": 0.68,
+      "evidence_count": 93,
+      "num_binaries": 93
+    },
+    {
+      "name": "OpenSSH",
+      "max_confidence": 0.68,
+      "evidence_count": 1,
+      "num_binaries": 1
+    },
+    {
+      "name": "OpenSSL",
+      "max_confidence": 0.68,
+      "evidence_count": 37,
+      "num_binaries": 37
+    },
+    {
+      "name": "SQLite",
+      "max_confidence": 0.68,
+      "evidence_count": 5,
+      "num_binaries": 5
+    },
+    {
+      "name": "dnsmasq",
+      "max_confidence": 0.68,
+      "evidence_count": 1,
+      "num_binaries": 1
+    },
+    {
+      "name": "libcurl",
+      "max_confidence": 0.68,
+      "evidence_count": 17,
+      "num_binaries": 17
+    },
+    {
+      "name": "uClibc / glibc",
+      "max_confidence": 0.68,
+      "evidence_count": 218,
+      "num_binaries": 218
+    },
+    {
+      "name": "zlib",
+      "max_confidence": 0.68,
+      "evidence_count": 14,
+      "num_binaries": 14
+    }
+  ]
+}

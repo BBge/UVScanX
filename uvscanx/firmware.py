@@ -86,7 +86,14 @@ def download(manifest_path: Path | None, out_dir: Path, profile: str = "smoke", 
                     shutil.copy2(src, dest)
                     status = "copied"
             elif not dest.exists() or force:
-                req = urllib.request.Request(_safe_url(e["url"]), headers={"User-Agent": "uvscanx/0.1"})
+                headers = {"User-Agent": "uvscanx/0.1"}
+                if e.get("source_page"):
+                    # Some vendor CDNs (notably camera firmware portals) reject
+                    # direct GET requests without the support-page referer even
+                    # though HEAD works.  Keep the manifest source_page as the
+                    # traceable origin and use it for downloads when present.
+                    headers["Referer"] = str(e["source_page"])
+                req = urllib.request.Request(_safe_url(e["url"]), headers=headers)
                 with urllib.request.urlopen(req, timeout=120) as r, dest.open("wb") as f:
                     shutil.copyfileobj(r, f)
                 status = "downloaded"
@@ -330,8 +337,15 @@ def _try_unblob(path: Path, target: Path, steps: List[Dict[str, Any]]) -> bool:
         return False
     dest = target / "unblob"
     cp = run(["unblob", "-e", str(dest), str(path)], timeout=600)
-    steps.append({"tool": "unblob", "status": "ok" if cp.returncode == 0 else "failed", "stderr": cp.stderr[-1000:]})
-    return cp.returncode == 0
+    extracted_files = [p for p in dest.rglob("*") if p.is_file()] if dest.exists() else []
+    ok = cp.returncode == 0 and bool(extracted_files)
+    steps.append({
+        "tool": "unblob",
+        "status": "ok" if ok else "failed",
+        "extracted_files": len(extracted_files),
+        "stderr": cp.stderr[-1000:],
+    })
+    return ok
 
 
 def _try_binwalk(path: Path, target: Path, steps: List[Dict[str, Any]]) -> bool:

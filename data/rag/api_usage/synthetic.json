@@ -4,7 +4,6 @@
   "aliases": [
     "demo_arg_api"
   ],
-  "version_hints": [],
   "sources": [
     {
       "title": "local synthetic example",

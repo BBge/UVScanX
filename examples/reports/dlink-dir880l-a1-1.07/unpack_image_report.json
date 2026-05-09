@@ -1,0 +1,30 @@
+{
+  "output_dir": "runs/example-dlink/rootfs-image",
+  "items": [
+    {
+      "input": "/home/binbin/uvscan/runs/example-dlink/rootfs-zip/DIR-880L_A1_FW_1.07/DIR880A1_FW107WWb08.bin",
+      "output": "runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08",
+      "steps": [
+        {
+          "tool": "unsquashfs",
+          "status": "failed",
+          "stderr": "FATAL ERROR: Can't find a valid SQUASHFS superblock on /home/binbin/uvscan/runs/example-dlink/rootfs-zip/DIR-880L_A1_FW_1.07/DIR880A1_FW107WWb08.bin\n"
+        },
+        {
+          "tool": "sasquatch",
+          "status": "failed",
+          "stderr": "SquashFS version [24374.27748] / inode count [671088640] suggests a SquashFS image of a different endianess\nNon-standard SquashFS Magic: ^��\u0017\nReading a different endian SQUASHFS filesystem on /home/binbin/uvscan/runs/example-dlink/rootfs-zip/DIR-880L_A1_FW_1.07/DIR880A1_FW107WWb08.bin\nFilesystem on /home/binbin/uvscan/runs/example-dlink/rootfs-zip/DIR-880L_A1_FW_1.07/DIR880A1_FW107WWb08.bin is (13919:25708), which is a later filesystem version than I support!\n"
+        },
+        {
+          "tool": "unsquashfs",
+          "status": "ok",
+          "offset": 1835156,
+          "image": "runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/embedded_1835156.squashfs",
+          "stderr": "er!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/random, because you're not superuser!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/tts/0, because you're not superuser!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/tts/1, because you're not superuser!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/tty, because you're not superuser!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/urandom, because you're not superuser!\n\ncreate_inode: could not create character device runs/example-dlink/rootfs-image/DIR880A1_FW107WWb08/unsquashfs-root-1835156/dev/zero, because you're not superuser!\n"
+        }
+      ],
+      "status": "ok",
+      "error": null
+    }
+  ]
+}

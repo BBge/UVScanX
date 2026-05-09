@@ -9,16 +9,6 @@
     "RAND_",
     "ASN1_"
   ],
-  "version_hints": [
-    {
-      "pattern": "OpenSSL\\s+([0-9][A-Za-z0-9.\\-a-z]*)",
-      "evidence": "OpenSSL version banner"
-    },
-    {
-      "pattern": "lib(?:ssl|crypto)\\.so\\.([0-9][0-9.]*)",
-      "evidence": "SONAME"
-    }
-  ],
   "sources": [
     {
       "title": "OpenSSL SSL_read",

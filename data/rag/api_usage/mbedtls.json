@@ -7,16 +7,6 @@
     "libmbedtls.so",
     "libmbedcrypto.so"
   ],
-  "version_hints": [
-    {
-      "pattern": "mbed TLS\\s+([0-9]+\\.[0-9.]+)",
-      "evidence": "mbed TLS version banner"
-    },
-    {
-      "pattern": "MBEDTLS_VERSION_STRING[^0-9]*([0-9]+\\.[0-9.]+)",
-      "evidence": "version macro/string"
-    }
-  ],
   "sources": [
     {
       "title": "Mbed TLS SSL/TLS API reference",

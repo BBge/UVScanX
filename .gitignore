@@ -32,8 +32,17 @@ data/rag/index/*
 # Synthetic ELF binaries are generated from examples/synthetic/*.s.
 examples/synthetic/bin/
 
+# Only the representative public D-Link example firmware/report is committed.
+examples/firmware/*
+!examples/firmware/dlink-dir880l-a1-1.07/
+!examples/firmware/dlink-dir880l-a1-1.07/DIR-880L_A1_FW_1.07.zip
+examples/reports/*
+!examples/reports/dlink-dir880l-a1-1.07/
+!examples/reports/dlink-dir880l-a1-1.07/**
+
 # Local dependency/bootstrap/build caches.
 tools/
 
 # Accidental shell redirection artifacts.
 =*
+unblob.log

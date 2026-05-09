@@ -8,20 +8,6 @@
     "libc.so",
     "ld-uClibc.so"
   ],
-  "version_hints": [
-    {
-      "pattern": "GLIBC_([0-9]+\\.[0-9.]+)",
-      "evidence": "GLIBC symbol version"
-    },
-    {
-      "pattern": "GNU C Library[^0-9]*([0-9]+\\.[0-9.]+)",
-      "evidence": "glibc banner"
-    },
-    {
-      "pattern": "uClibc(?:-ng)?\\s*([0-9]+\\.[0-9.]+)",
-      "evidence": "uClibc banner"
-    }
-  ],
   "sources": [
     {
       "title": "GNU C Library Manual",

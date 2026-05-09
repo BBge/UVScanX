@@ -1,0 +1,17 @@
+{
+  "output_dir": "runs/example-dlink/rootfs-zip",
+  "items": [
+    {
+      "input": "/home/binbin/uvscan/examples/firmware/dlink-dir880l-a1-1.07/DIR-880L_A1_FW_1.07.zip",
+      "output": "runs/example-dlink/rootfs-zip/DIR-880L_A1_FW_1.07",
+      "steps": [
+        {
+          "tool": "python.zipfile",
+          "status": "ok"
+        }
+      ],
+      "status": "ok",
+      "error": null
+    }
+  ]
+}

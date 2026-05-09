@@ -5,16 +5,6 @@
     "wolfSSL",
     "libwolfssl.so"
   ],
-  "version_hints": [
-    {
-      "pattern": "wolfSSL\\s+v?([0-9]+\\.[0-9.]+)",
-      "evidence": "wolfSSL version banner"
-    },
-    {
-      "pattern": "LIBWOLFSSL_VERSION_STRING[^0-9]*([0-9]+\\.[0-9.]+)",
-      "evidence": "version string/macro"
-    }
-  ],
   "sources": [
     {
       "title": "wolfSSL Manual - SSL functions",

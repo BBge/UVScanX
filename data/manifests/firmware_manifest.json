@@ -1,7 +1,8 @@
 {
   "metadata": {
     "name": "UVScanX firmware test set",
-    "note": "URLs are official/vendor or public vendor CDN links. SHA256 is filled after download if not known in advance. Use profile=full for all samples."
+    "note": "URLs are official/vendor or public vendor CDN links. SHA256 is filled after download if not known in advance. Use profile=full for all samples. Added entries are metadata-only test targets; firmware archives are not stored in git.",
+    "collected_date": "2026-05-09"
   },
   "firmware": [
     {
@@ -91,6 +92,276 @@
         "full"
       ],
       "resolver": "hikvision_ds2cd"
+    },
+    {
+      "id": "tplink-archer-ax55-v1-251119",
+      "vendor": "TP-Link",
+      "product": "Archer AX55",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "251119",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "37.85 MB",
+      "content_length": 39691098,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202512/20251217/Archer AX55_V1_251119.zip",
+      "filename": "Archer_AX55_V1_251119.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax55/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax21-v3-240809",
+      "vendor": "TP-Link",
+      "product": "Archer AX21",
+      "device_type": "router",
+      "hardware_version": "V3",
+      "firmware_version": "240809",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "29.86 MB",
+      "content_length": 31312466,
+      "url": "https://static.tp-link.com/upload/firmware/2024/202409/20240925/Archer AX21(US)_V3_240809.zip",
+      "filename": "Archer_AX21(US)_V3_240809.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax21/v3/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax10-v1-250828",
+      "vendor": "TP-Link",
+      "product": "Archer AX10",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "250828",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "15.14 MB",
+      "content_length": 15877426,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250905/Archer AX10_V1_250828.zip",
+      "filename": "Archer_AX10_V1_250828.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax10/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax50-v1-251022",
+      "vendor": "TP-Link",
+      "product": "Archer AX50",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "251022",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "29.43 MB",
+      "content_length": 30855958,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202511/20251121/Archer AX50_V1_251022.zip",
+      "filename": "Archer_AX50_V1_251022.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax50/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax6000-v1v2-20250725",
+      "vendor": "TP-Link",
+      "product": "Archer AX6000",
+      "device_type": "router",
+      "hardware_version": "V1/V2",
+      "firmware_version": "1.4.3 P1 [20250725-rel18118]",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "42.41 MB",
+      "content_length": 44471365,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202508/20250827/ax6000v2-ax6000v1-up-ver1-4-3-P1[20250725-rel18118].zip",
+      "filename": "ax6000v2-ax6000v1-up-ver1-4-3-P1[20250725-rel18118].zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax6000/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax11000-v1v2-20250725",
+      "vendor": "TP-Link",
+      "product": "Archer AX11000",
+      "device_type": "router",
+      "hardware_version": "V1/V2",
+      "firmware_version": "2.2.1 P1 [20250725-rel9119]",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "43.91 MB",
+      "content_length": 46037807,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250905/ax11000v2-ax11000v1-up-ver2-2-1-P1[20250725-rel9119].zip",
+      "filename": "ax11000v2-ax11000v1-up-ver2-2-1-P1[20250725-rel9119].zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax11000/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax1500-v1-250828",
+      "vendor": "TP-Link",
+      "product": "Archer AX1500",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "250828",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "15.14 MB",
+      "content_length": 15877442,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250905/Archer AX1500_V1_250828.zip",
+      "filename": "Archer_AX1500_V1_250828.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax1500/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-c80-v1-240812",
+      "vendor": "TP-Link",
+      "product": "Archer C80",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "240812",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "3.76 MB",
+      "content_length": 3947593,
+      "url": "https://static.tp-link.com/upload/firmware/2024/202412/20241206/Archer C80(US)_V1_240812.zip",
+      "filename": "Archer_C80(US)_V1_240812.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-c80/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-be550-v1-250813",
+      "vendor": "TP-Link",
+      "product": "Archer BE550",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "1.2.1 Build 250813",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "45.67 MB",
+      "content_length": 47883231,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250905/Archer BE550_V1_1.2.1_250813.zip",
+      "filename": "Archer_BE550_V1_1.2.1_250813.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-be550/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-be800-v1-251015",
+      "vendor": "TP-Link",
+      "product": "Archer BE800",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "251015",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "54.67 MB",
+      "content_length": 57320734,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202511/20251112/Archer BE800_V1_251015.zip",
+      "filename": "Archer_BE800_V1_251015.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-be800/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-axe75-v1-260209",
+      "vendor": "TP-Link",
+      "product": "Archer AXE75",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "260209",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "49.38 MB",
+      "content_length": 51776303,
+      "url": "https://static.tp-link.com/upload/firmware/2026/202603/20260316/Archer AXE75_V1_260209.zip",
+      "filename": "Archer_AXE75_V1_260209.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-axe75/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-axe5400-v1-260209",
+      "vendor": "TP-Link",
+      "product": "Archer AXE5400",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "260209",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "49.38 MB",
+      "content_length": 51776307,
+      "url": "https://static.tp-link.com/upload/firmware/2026/202603/20260316/Archer AXE5400(USW)_V1_260209.zip",
+      "filename": "Archer_AXE5400(USW)_V1_260209.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-axe5400/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax3000-v1-230831",
+      "vendor": "TP-Link",
+      "product": "Archer AX3000",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "230831",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "26.15 MB",
+      "content_length": 27418720,
+      "url": "https://static.tp-link.com/upload/firmware/2023/202309/20230906/Archer AX3000(US)_V1_230831.zip",
+      "filename": "Archer_AX3000(US)_V1_230831.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax3000/v1/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax1800-v5.6-250814",
+      "vendor": "TP-Link",
+      "product": "Archer AX1800",
+      "device_type": "router",
+      "hardware_version": "V5.6",
+      "firmware_version": "250814",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "26.79 MB",
+      "content_length": 28088702,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250905/Archer AX1800(USW)_V5.6_250814.zip",
+      "filename": "Archer_AX1800(USW)_V5.6_250814.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax1800/v5.6/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-c4000-v3-20250919",
+      "vendor": "TP-Link",
+      "product": "Archer C4000",
+      "device_type": "router",
+      "hardware_version": "V3",
+      "firmware_version": "1.1.1 P1 [20250919-rel16301]",
+      "published_date": "unknown; URL/source page collected 2026-05-09",
+      "size_hint": "33.51 MB",
+      "content_length": 35137923,
+      "url": "https://static.tp-link.com/upload/firmware/2025/202509/20250930/Archer_C4000v3-up-ver1-1-1-P1[20250919-rel16301].zip",
+      "filename": "Archer_C4000v3-up-ver1-1-1-P1[20250919-rel16301].zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-c4000/v3/#Firmware",
+      "url_status_verified": "HEAD 200 on 2026-05-09",
+      "profiles": [
+        "full"
+      ]
     }
   ]
 }

@@ -14,6 +14,7 @@ sudo apt-get install -y \
   zlib1g-dev liblzma-dev liblzo2-dev
 
 python3 -m pip install --user --break-system-packages -r "$ROOT/requirements.txt" 'typer>=0.12' ubi-reader jefferson
+python3 -m pip install --user --break-system-packages 'unblob>=26.3.0'
 
 if ! command -v sasquatch >/dev/null 2>&1; then
   mkdir -p "$ROOT/tools/src"

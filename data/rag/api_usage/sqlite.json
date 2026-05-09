@@ -6,12 +6,6 @@
     "sqlite3",
     "libsqlite3.so"
   ],
-  "version_hints": [
-    {
-      "pattern": "SQLite(?: version)?\\s*([0-9]+\\.[0-9.]+)",
-      "evidence": "SQLite version banner"
-    }
-  ],
   "sources": [
     {
       "title": "SQLite C API",

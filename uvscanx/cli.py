@@ -76,7 +76,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_tpc = sub.add_parser("tpc", help="Third-party component identification")
     ts = p_tpc.add_subparsers(dest="tpc_cmd", required=True)
-    p = ts.add_parser("identify", help="Identify TPCs/versions from ELF evidence")
+    p = ts.add_parser("identify", help="Identify TPC names from ELF evidence")
     p.add_argument("inputs", nargs="+", type=Path)
     p.add_argument("--out", type=Path, default=Path("runs/tpc"))
     p.add_argument("--limit", type=int, default=200)

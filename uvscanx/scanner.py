@@ -195,8 +195,15 @@ def _tpc_for_binary(tpc: Dict[str, Any] | None, binary: str) -> List[Dict[str, A
         return []
     for r in tpc.get("binaries", []):
         if r.get("binary") == binary:
-            return r.get("llm", {}).get("components", [])
+            return [_sanitize_component(c) for c in r.get("llm", {}).get("components", []) if isinstance(c, dict)]
     return []
+
+
+def _sanitize_component(c: Dict[str, Any]) -> Dict[str, Any]:
+    # TPC version inference is intentionally disabled.  Drop version fields even
+    # when users pass an older cached tpc_summary.json produced by a previous
+    # UVScanX build.
+    return {k: v for k, v in c.items() if k != "version"}
 
 
 def _rule_confidence(api: str | None, rules: Dict[str, Any]) -> float | None:
@@ -397,27 +404,27 @@ def _infer_component_from_api(api: str | None) -> Dict[str, Any] | None:
         return None
     a = api.lower()
     if a.startswith("ssl_") or a.startswith("asn1_") or a.startswith("rand_") or a.startswith("x509"):
-        return {"name": "OpenSSL", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates OpenSSL-family API: {api}; no version string was recovered from this binary evidence"]}
+        return {"name": "OpenSSL", "confidence": 0.55, "evidence": [f"API prefix indicates OpenSSL-family API: {api}"]}
     if a.startswith("sqlite3_"):
-        return {"name": "SQLite", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates SQLite API: {api}"]}
+        return {"name": "SQLite", "confidence": 0.55, "evidence": [f"API prefix indicates SQLite API: {api}"]}
     if a.startswith("pcap_"):
-        return {"name": "libpcap", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates libpcap API: {api}"]}
+        return {"name": "libpcap", "confidence": 0.55, "evidence": [f"API prefix indicates libpcap API: {api}"]}
     if a.startswith("curl_"):
-        return {"name": "libcurl", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates libcurl API: {api}"]}
+        return {"name": "libcurl", "confidence": 0.55, "evidence": [f"API prefix indicates libcurl API: {api}"]}
     if a.startswith("xml"):
-        return {"name": "libxml2", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates libxml2 API: {api}"]}
+        return {"name": "libxml2", "confidence": 0.55, "evidence": [f"API prefix indicates libxml2 API: {api}"]}
     if a.startswith("mbedtls_"):
-        return {"name": "mbedTLS", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates mbedTLS API: {api}"]}
+        return {"name": "mbedTLS", "confidence": 0.55, "evidence": [f"API prefix indicates mbedTLS API: {api}"]}
     if a.startswith("wolfssl"):
-        return {"name": "wolfSSL", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates wolfSSL API: {api}"]}
+        return {"name": "wolfSSL", "confidence": 0.55, "evidence": [f"API prefix indicates wolfSSL API: {api}"]}
     if a.startswith("upnp"):
-        return {"name": "libupnp", "version": "unknown", "confidence": 0.55, "evidence": [f"API prefix indicates libupnp API: {api}"]}
+        return {"name": "libupnp", "confidence": 0.55, "evidence": [f"API prefix indicates libupnp API: {api}"]}
     if a in {"fopen", "fclose", "malloc", "calloc", "realloc", "strdup", "free", "dlopen", "dlclose", "popen", "pclose", "pthread_mutex_init", "pthread_mutex_destroy"}:
-        return {"name": "uClibc / glibc", "version": "unknown", "confidence": 0.45, "evidence": [f"API is a common C runtime API: {api}"]}
+        return {"name": "uClibc / glibc", "confidence": 0.45, "evidence": [f"API is a common C runtime API: {api}"]}
     if a.startswith("sshbuf_") or a.startswith("sshkey_"):
-        return {"name": "OpenSSH", "version": "unknown", "confidence": 0.45, "evidence": [f"API prefix indicates OpenSSH internal API: {api}"]}
+        return {"name": "OpenSSH", "confidence": 0.45, "evidence": [f"API prefix indicates OpenSSH internal API: {api}"]}
     if a.startswith("demo_"):
-        return {"name": "synthetic regression fixture", "version": "not applicable", "confidence": 1.0, "evidence": [f"Synthetic demo API: {api}"]}
+        return {"name": "synthetic regression fixture", "confidence": 1.0, "evidence": [f"Synthetic demo API: {api}"]}
     return None
 
 
@@ -436,8 +443,7 @@ def _tpc_label(item: Dict[str, Any]) -> str:
     labels = []
     for c in comps[:3]:
         name = c.get("name") or "unknown"
-        ver = c.get("version") or "unknown"
-        labels.append(f"{name} {ver}")
+        labels.append(f"{name}")
     return "; ".join(labels)
 
 def _write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
@@ -586,7 +592,7 @@ pre {{ margin:0; padding:18px; overflow:auto; background:#020617; color:#d1d5db;
   <section>
     <h2>Priority Potential Usage Violations</h2>
     <table>
-      <thead><tr><th>Checker</th><th>API</th><th>Severity</th><th>Noise</th><th>Component / Version</th><th>Address</th><th>Binary</th><th>Reason</th><th>Evidence</th></tr></thead>
+      <thead><tr><th>Checker</th><th>API</th><th>Severity</th><th>Noise</th><th>Component</th><th>Address</th><th>Binary</th><th>Reason</th><th>Evidence</th></tr></thead>
       <tbody>{''.join(finding_rows)}</tbody>
     </table>
   </section>
@@ -595,7 +601,7 @@ pre {{ margin:0; padding:18px; overflow:auto; background:#020617; color:#d1d5db;
     <details open>
       <summary>Auxiliary / High-noise Findings</summary>
       <table>
-        <thead><tr><th>Checker</th><th>API</th><th>Severity</th><th>Noise</th><th>Component / Version</th><th>Address</th><th>Binary</th><th>Reason</th><th>Evidence</th></tr></thead>
+        <thead><tr><th>Checker</th><th>API</th><th>Severity</th><th>Noise</th><th>Component</th><th>Address</th><th>Binary</th><th>Reason</th><th>Evidence</th></tr></thead>
         <tbody>{''.join(aux_rows)}</tbody>
       </table>
     </details>
@@ -604,7 +610,7 @@ pre {{ margin:0; padding:18px; overflow:auto; background:#020617; color:#d1d5db;
   <section>
     <h2>Needs Review / Evidence Insufficient</h2>
     <table>
-      <thead><tr><th>Checker</th><th>API</th><th>Component / Version</th><th>Binary</th><th>Reason</th></tr></thead>
+      <thead><tr><th>Checker</th><th>API</th><th>Component</th><th>Binary</th><th>Reason</th></tr></thead>
       <tbody>{''.join(obs_rows)}</tbody>
     </table>
   </section>

@@ -6,12 +6,6 @@
     "pcap_",
     "libpcap.so"
   ],
-  "version_hints": [
-    {
-      "pattern": "libpcap(?: version)?\\s*([0-9]+\\.[0-9.]+)",
-      "evidence": "libpcap version banner"
-    }
-  ],
   "sources": [
     {
       "title": "pcap_activate man page",

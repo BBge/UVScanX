@@ -7,20 +7,6 @@
     "libupnp.so",
     "UpnpInit"
   ],
-  "version_hints": [
-    {
-      "pattern": "libupnp[/ ]([0-9]+\\.[0-9.]+)",
-      "evidence": "libupnp version banner"
-    },
-    {
-      "pattern": "Portable SDK for UPnP[^0-9]*([0-9]+\\.[0-9.]+)",
-      "evidence": "pupnp banner"
-    },
-    {
-      "pattern": "libupnp\\.so\\.([0-9][0-9.]*)",
-      "evidence": "SONAME"
-    }
-  ],
   "sources": [
     {
       "title": "pupnp API documentation",

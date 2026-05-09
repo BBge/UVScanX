@@ -5,16 +5,6 @@
     "dnsmasq",
     "Dnsmasq"
   ],
-  "version_hints": [
-    {
-      "pattern": "Dnsmasq version\\s+([0-9][A-Za-z0-9.\\-]*)",
-      "evidence": "dnsmasq version banner"
-    },
-    {
-      "pattern": "dnsmasq-([0-9]+\\.[0-9.]+)",
-      "evidence": "package/build string"
-    }
-  ],
   "sources": [
     {
       "title": "dnsmasq project documentation",
@@ -31,14 +21,13 @@
     {
       "id": "dnsmasq-component-id",
       "type": "component_only",
-      "expected": "Identify dnsmasq version/config evidence. Do not report C API misuse unless concrete internal API rules are added for a build.",
+      "expected": "Identify dnsmasq component/config evidence. Do not report C API misuse unless concrete internal API rules are added for a build.",
       "evidence_summary": "dnsmasq is normally a daemon shipped as an application component, not a stable third-party C API used by other binaries.",
       "source_url": "https://thekelleys.org.uk/dnsmasq/doc.html",
       "confidence": 0.9,
       "active": false,
       "tags": [
         "component",
-        "version",
         "config-review"
       ]
     },

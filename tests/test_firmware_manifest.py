@@ -7,6 +7,7 @@ from uvscanx.firmware import load_manifest, select_entries, download
 def test_manifest_profiles():
     m = load_manifest()
     full = select_entries(m, "full")
+    assert len(full) >= 20
     assert len([e for e in full if e["device_type"] == "router"]) >= 2
     assert len([e for e in full if e["device_type"] == "camera"]) >= 2
 

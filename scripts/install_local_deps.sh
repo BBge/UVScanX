@@ -29,7 +29,7 @@ if ! python3 -m pip --version >/dev/null 2>&1; then
   curl -L https://bootstrap.pypa.io/get-pip.py -o "$ROOT/tools/bootstrap/get-pip.py"
   python3 "$ROOT/tools/bootstrap/get-pip.py" --user --break-system-packages
 fi
-python3 -m pip install --user --break-system-packages ubi-reader jefferson || true
+python3 -m pip install --user --break-system-packages ubi-reader jefferson unblob || true
 cat <<EOF
 [UVScanX] local deps installed under $LOCAL and ~/.local/bin.
 [UVScanX] UVScanX auto-activates these paths via uvscanx/deps.py.

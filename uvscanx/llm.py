@@ -90,45 +90,28 @@ def mock_rules() -> Dict[str, Any]:
 
 
 def heuristic_components(prompt: str) -> List[Dict[str, Any]]:
-    """Deterministic TPC/version guesser used when no LLM API key is set.
+    """Deterministic TPC name guesser used when no LLM API key is set.
 
-    It consumes the same local RAG documents as rule extraction: version_hints
-    provide regexes, aliases provide library/component fingerprints, and a small
-    symbol-prefix map catches common stripped-firmware evidence.
+    It consumes the same local RAG documents as rule extraction: aliases provide
+    library/component fingerprints, and a small symbol-prefix map catches common
+    stripped-firmware evidence.  It intentionally does not infer versions.
     """
     low = prompt.lower()
     comps: List[Dict[str, Any]] = []
 
-    def add(name: str, version: str | None, confidence: float, evidence: str) -> None:
+    def add(name: str, confidence: float, evidence: str) -> None:
         for c in comps:
-            if c.get("name") == name and (c.get("version") or "unknown") == (version or "unknown"):
+            if c.get("name") == name:
                 c.setdefault("evidence", []).append(evidence)
                 c["confidence"] = max(float(c.get("confidence") or 0), confidence)
                 return
-        comps.append({"name": name, "version": version, "confidence": confidence, "evidence": [evidence]})
+        comps.append({"name": name, "confidence": confidence, "evidence": [evidence]})
 
     try:
         from .rag import load_documents
         rag_docs = load_documents()
     except Exception:
         rag_docs = []
-
-    # RAG-driven version patterns.
-    for doc in rag_docs:
-        name = str(doc.get("library") or "").strip()
-        if not name:
-            continue
-        for hint in doc.get("version_hints") or []:
-            pat = hint.get("pattern")
-            if not pat:
-                continue
-            try:
-                m = re.search(pat, prompt, re.I)
-            except re.error:
-                continue
-            if m:
-                version = next((g for g in m.groups() if g), None)
-                add(name, version, 0.9, f"matched RAG version hint: {hint.get('evidence') or pat}")
 
     # RAG aliases and known symbol prefixes.  Application components such as
     # dnsmasq/dropbear are identified as components, not API-misuse rules.
@@ -161,6 +144,6 @@ def heuristic_components(prompt: str) -> List[Dict[str, Any]]:
             continue
         hits = [n for n in needles if n and n.lower() in low]
         if hits:
-            add(name, None, 0.68, f"matched symbols/paths/aliases: {', '.join(hits[:8])}")
+            add(name, 0.68, f"matched symbols/paths/aliases: {', '.join(hits[:8])}")
             existing_names.add(name)
     return comps

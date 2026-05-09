@@ -6,16 +6,6 @@
     "libcurl.so",
     "curl_easy"
   ],
-  "version_hints": [
-    {
-      "pattern": "libcurl[/ ]([0-9]+\\.[0-9.]+)",
-      "evidence": "libcurl version banner"
-    },
-    {
-      "pattern": "libcurl\\.so\\.([0-9][0-9.]*)",
-      "evidence": "SONAME"
-    }
-  ],
   "sources": [
     {
       "title": "curl_easy_perform(3)",

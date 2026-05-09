@@ -202,7 +202,7 @@ def search(query: str, rag_dir: Path | None = None, limit: int = 10, include_ind
     qtokens = _tokens(query)
     scored: List[tuple[int, Dict[str, Any]]] = []
     for doc in load_documents(rag_dir):
-        lib_blob = json.dumps({k: doc.get(k) for k in ("library", "aliases", "component_type", "version_hints")}, ensure_ascii=False)
+        lib_blob = json.dumps({k: doc.get(k) for k in ("library", "aliases", "component_type")}, ensure_ascii=False)
         for rule in doc.get("rules") or []:
             blob = lib_blob + "\n" + json.dumps(rule, ensure_ascii=False)
             toks = _tokens(blob)

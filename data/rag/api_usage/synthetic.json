@@ -1,0 +1,40 @@
+{
+  "library": "synthetic regression fixture",
+  "component_type": "test_fixture",
+  "aliases": [
+    "demo_arg_api"
+  ],
+  "version_hints": [],
+  "sources": [
+    {
+      "title": "local synthetic example",
+      "url": "examples/synthetic/argument_bad.s",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "synthetic-demo-arg",
+      "type": "argument",
+      "api": "demo_arg_api",
+      "arg_index": 1,
+      "operator": "==",
+      "value": 0,
+      "window": 8,
+      "expected": "Synthetic regression rule: first integer argument must be 0.",
+      "evidence_summary": "Used by local smoke tests to validate argument facts and Datalog rules.",
+      "source_url": "examples/synthetic/argument_bad.s",
+      "confidence": 1.0,
+      "active": true,
+      "tags": [
+        "test",
+        "argument"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

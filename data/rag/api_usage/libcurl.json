@@ -1,0 +1,127 @@
+{
+  "library": "libcurl",
+  "component_type": "library",
+  "aliases": [
+    "curl",
+    "libcurl.so",
+    "curl_easy"
+  ],
+  "version_hints": [
+    {
+      "pattern": "libcurl[/ ]([0-9]+\\.[0-9.]+)",
+      "evidence": "libcurl version banner"
+    },
+    {
+      "pattern": "libcurl\\.so\\.([0-9][0-9.]*)",
+      "evidence": "SONAME"
+    }
+  ],
+  "sources": [
+    {
+      "title": "curl_easy_perform(3)",
+      "url": "https://curl.se/libcurl/c/curl_easy_perform.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "curl_easy_init(3)",
+      "url": "https://curl.se/libcurl/c/curl_easy_init.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "curl_easy_cleanup(3)",
+      "url": "https://curl.se/libcurl/c/curl_easy_cleanup.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "curl_slist_free_all(3)",
+      "url": "https://curl.se/libcurl/c/curl_slist_free_all.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "CURLOPT_SSL_VERIFYPEER(3)",
+      "url": "https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "libcurl-curl_easy_perform-check",
+      "type": "return_value",
+      "api": "curl_easy_perform",
+      "constraint": "must_check",
+      "expected": "Check CURLcode and handle any value other than CURLE_OK as a transfer/setup failure.",
+      "evidence_summary": "curl_easy_perform returns a CURLcode; CURLE_OK denotes success.",
+      "source_url": "https://curl.se/libcurl/c/curl_easy_perform.html",
+      "confidence": 0.97,
+      "active": true,
+      "tags": [
+        "return",
+        "CURLcode"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libcurl-easy-init-cleanup",
+      "type": "resource_lifecycle",
+      "open_api": "curl_easy_init",
+      "close_api": "curl_easy_cleanup",
+      "window": 80,
+      "expected": "Release each easy handle created by curl_easy_init with curl_easy_cleanup.",
+      "evidence_summary": "libcurl documents curl_easy_cleanup as the matching cleanup function for an easy handle.",
+      "source_url": "https://curl.se/libcurl/c/curl_easy_cleanup.html",
+      "confidence": 0.96,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "handle"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libcurl-slist-free",
+      "type": "resource_lifecycle",
+      "open_api": "curl_slist_append",
+      "close_api": "curl_slist_free_all",
+      "window": 80,
+      "expected": "Free curl_slist chains allocated/extended by curl_slist_append with curl_slist_free_all.",
+      "evidence_summary": "curl_slist_free_all removes all traces of a previously built curl_slist.",
+      "source_url": "https://curl.se/libcurl/c/curl_slist_free_all.html",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "allocation"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libcurl-verifypeer-nonzero",
+      "type": "argument",
+      "api": "curl_easy_setopt",
+      "arg_index": 3,
+      "operator": "==",
+      "value": 1,
+      "expected": "For HTTPS certificate validation, CURLOPT_SSL_VERIFYPEER should normally be enabled. This variadic option/value rule needs manual confirmation that arg2 is CURLOPT_SSL_VERIFYPEER.",
+      "evidence_summary": "libcurl documents CURLOPT_SSL_VERIFYPEER as controlling peer certificate verification.",
+      "source_url": "https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html",
+      "confidence": 0.72,
+      "active": false,
+      "tags": [
+        "tls",
+        "manual-review",
+        "variadic"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

@@ -1,0 +1,150 @@
+{
+  "library": "mbedTLS",
+  "component_type": "library",
+  "aliases": [
+    "mbed TLS",
+    "mbedtls",
+    "libmbedtls.so",
+    "libmbedcrypto.so"
+  ],
+  "version_hints": [
+    {
+      "pattern": "mbed TLS\\s+([0-9]+\\.[0-9.]+)",
+      "evidence": "mbed TLS version banner"
+    },
+    {
+      "pattern": "MBEDTLS_VERSION_STRING[^0-9]*([0-9]+\\.[0-9.]+)",
+      "evidence": "version macro/string"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Mbed TLS SSL/TLS API reference",
+      "url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/ssl_8h/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "Mbed TLS X.509 API reference",
+      "url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/x509__crt_8h/",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "mbedtls-ssl-read-check",
+      "type": "return_value",
+      "api": "mbedtls_ssl_read",
+      "constraint": "must_check",
+      "expected": "Check the return value; negative values are errors and zero/positive values require protocol-specific handling.",
+      "evidence_summary": "Mbed TLS SSL read APIs use integer return codes, with negative values for errors.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/ssl_8h/",
+      "confidence": 0.92,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "mbedtls-ssl-write-check",
+      "type": "return_value",
+      "api": "mbedtls_ssl_write",
+      "constraint": "must_check",
+      "expected": "Check the return value; negative values are errors and positive values report bytes written.",
+      "evidence_summary": "Mbed TLS SSL write APIs use integer return codes, with negative values for errors.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/ssl_8h/",
+      "confidence": 0.92,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "mbedtls-x509-parse-check",
+      "type": "return_value",
+      "api": "mbedtls_x509_crt_parse",
+      "constraint": "must_check",
+      "expected": "Check the parse return value and handle non-success rather than continuing with an invalid certificate chain.",
+      "evidence_summary": "Mbed TLS certificate parse APIs return status codes that callers must inspect.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/x509__crt_8h/",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "return",
+        "x509"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "mbedtls-ssl-setup-free",
+      "type": "resource_lifecycle",
+      "open_api": "mbedtls_ssl_setup",
+      "close_api": "mbedtls_ssl_free",
+      "window": 120,
+      "expected": "Free SSL contexts initialized/setup for a session with mbedtls_ssl_free.",
+      "evidence_summary": "Mbed TLS exposes mbedtls_ssl_free for SSL context cleanup.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/ssl_8h/",
+      "confidence": 0.88,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "mbedtls-x509-init-free",
+      "type": "resource_lifecycle",
+      "open_api": "mbedtls_x509_crt_init",
+      "close_api": "mbedtls_x509_crt_free",
+      "window": 160,
+      "expected": "Release initialized X.509 certificate structures with mbedtls_x509_crt_free.",
+      "evidence_summary": "Mbed TLS pairs x509_crt_init with x509_crt_free.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/x509__crt_8h/",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "x509"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "mbedtls-authmode-not-none",
+      "type": "argument",
+      "api": "mbedtls_ssl_conf_authmode",
+      "arg_index": 2,
+      "operator": "!=",
+      "value": 0,
+      "window": 10,
+      "expected": "Do not configure MBEDTLS_SSL_VERIFY_NONE for connections that require peer certificate validation.",
+      "evidence_summary": "mbedtls_ssl_conf_authmode controls certificate verification; VERIFY_NONE disables verification.",
+      "source_url": "https://mbed-tls.readthedocs.io/projects/api/en/latest/api/file/ssl_8h/",
+      "confidence": 0.82,
+      "active": true,
+      "tags": [
+        "tls",
+        "verification",
+        "argument"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

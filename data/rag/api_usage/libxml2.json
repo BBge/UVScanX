@@ -1,0 +1,184 @@
+{
+  "library": "libxml2",
+  "component_type": "library",
+  "aliases": [
+    "libxml2.so",
+    "xmlReadFile",
+    "xmlDocPtr"
+  ],
+  "version_hints": [
+    {
+      "pattern": "LIBXML2?[_ ]VERSION[^0-9]*([0-9]+\\.[0-9.]+)",
+      "evidence": "libxml2 version macro/banner"
+    },
+    {
+      "pattern": "libxml2\\.so\\.([0-9][0-9.]*)",
+      "evidence": "SONAME"
+    }
+  ],
+  "sources": [
+    {
+      "title": "libxml2 parser API",
+      "url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/parser_8h.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "libxml2 tree API",
+      "url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "libxml2-xmlReadFile-null",
+      "type": "return_value",
+      "api": "xmlReadFile",
+      "constraint": "non_null_required",
+      "expected": "Check xmlReadFile result for NULL before using the xmlDocPtr.",
+      "evidence_summary": "Parser entry points return an xmlDocPtr and indicate parse/open failure by NULL.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/parser_8h.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "return",
+        "parser"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-xmlReadMemory-null",
+      "type": "return_value",
+      "api": "xmlReadMemory",
+      "constraint": "non_null_required",
+      "expected": "Check xmlReadMemory result for NULL before using the xmlDocPtr.",
+      "evidence_summary": "Parser entry points return an xmlDocPtr and can fail with NULL.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/parser_8h.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "return",
+        "parser"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-xmlParseFile-null",
+      "type": "return_value",
+      "api": "xmlParseFile",
+      "constraint": "non_null_required",
+      "expected": "Check xmlParseFile result for NULL before using the xmlDocPtr.",
+      "evidence_summary": "Legacy parse function returns a document pointer that must be checked.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/parser_8h.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "return",
+        "parser"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-readfile-freedoc",
+      "type": "resource_lifecycle",
+      "open_api": "xmlReadFile",
+      "close_api": "xmlFreeDoc",
+      "window": 120,
+      "expected": "Release parsed documents with xmlFreeDoc.",
+      "evidence_summary": "libxml2 tree API provides xmlFreeDoc for xmlDocPtr cleanup.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "document"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-readmemory-freedoc",
+      "type": "resource_lifecycle",
+      "open_api": "xmlReadMemory",
+      "close_api": "xmlFreeDoc",
+      "window": 120,
+      "expected": "Release parsed in-memory documents with xmlFreeDoc.",
+      "evidence_summary": "libxml2 tree API provides xmlFreeDoc for xmlDocPtr cleanup.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "document"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-parsefile-freedoc",
+      "type": "resource_lifecycle",
+      "open_api": "xmlParseFile",
+      "close_api": "xmlFreeDoc",
+      "window": 120,
+      "expected": "Release parsed documents with xmlFreeDoc.",
+      "evidence_summary": "xmlFreeDoc is the matching release operation for xmlDocPtr.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "document"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-getprop-free",
+      "type": "resource_lifecycle",
+      "open_api": "xmlGetProp",
+      "close_api": "xmlFree",
+      "window": 80,
+      "expected": "Free strings returned by xmlGetProp with xmlFree.",
+      "evidence_summary": "libxml2 allocated xmlChar* results are released with xmlFree.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "string"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libxml2-nodecontent-free",
+      "type": "resource_lifecycle",
+      "open_api": "xmlNodeGetContent",
+      "close_api": "xmlFree",
+      "window": 80,
+      "expected": "Free content returned by xmlNodeGetContent with xmlFree.",
+      "evidence_summary": "xmlNodeGetContent returns allocated content that callers release with xmlFree.",
+      "source_url": "https://gnome.pages.gitlab.gnome.org/libxml2/html/tree_8h.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "string"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

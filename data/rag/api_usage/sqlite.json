@@ -1,0 +1,50 @@
+{
+  "library": "SQLite",
+  "component_type": "library",
+  "aliases": [
+    "SQLite",
+    "sqlite3",
+    "libsqlite3.so"
+  ],
+  "version_hints": [
+    {
+      "pattern": "SQLite(?: version)?\\s*([0-9]+\\.[0-9.]+)",
+      "evidence": "SQLite version banner"
+    }
+  ],
+  "sources": [
+    {
+      "title": "SQLite C API",
+      "url": "https://www.sqlite.org/c3ref/intro.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "sqlite3_open/sqlite3_close",
+      "url": "https://www.sqlite.org/c3ref/open.html",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "sqlite-open-close",
+      "type": "resource_lifecycle",
+      "open_api": "sqlite3_open",
+      "close_api": "sqlite3_close",
+      "window": 30,
+      "expected": "Close every opened SQLite database handle with sqlite3_close.",
+      "evidence_summary": "sqlite3_close is the destructor for sqlite3 database connection handles.",
+      "source_url": "https://www.sqlite.org/c3ref/open.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "database"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

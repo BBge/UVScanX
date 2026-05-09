@@ -1,0 +1,8 @@
+openai>=1.0.0
+pyelftools>=0.31
+capstone>=5.0.0
+pydantic>=2.0.0
+rich>=13.0.0
+pytest>=8.0.0
+ubi-reader>=0.8.9
+pypdf>=4.0.0

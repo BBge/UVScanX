@@ -1,0 +1,135 @@
+.type address <: unsigned
+
+// ddisasm-compatible fact subset
+.decl instruction(ea:address, size:unsigned, prefix:symbol, opcode:symbol, op1:unsigned, op2:unsigned, op3:unsigned, op4:unsigned, immOffset:unsigned, displacementOffset:unsigned)
+.input instruction(delimiter="\t")
+.decl direct_call(src:address, dest:address)
+.input direct_call(delimiter="\t")
+.decl cfg_edge_to_symbol(src:address, symbol:symbol)
+.input cfg_edge_to_symbol(delimiter="\t")
+.decl function_symbol(addr:address, name:symbol)
+.input function_symbol(delimiter="\t")
+.decl next(src:address, dest:address)
+.input next(delimiter="\t")
+.decl call_context(call:address, func:symbol, ordinal:unsigned, text:symbol)
+.input call_context(delimiter="\t")
+.decl api_call(call:address, func:symbol, ordinal:unsigned, api:symbol, text:symbol)
+.input api_call(delimiter="\t")
+
+// Architecture / calling-convention facts for multi-architecture extraction.
+.decl binary_arch(binary:symbol, arch:symbol, bits:unsigned, endian:symbol, machine:symbol, branch_delay_slot:symbol)
+.input binary_arch(delimiter="\t")
+.decl calling_convention(arch:symbol, arg_index:unsigned, reg:symbol)
+.input calling_convention(delimiter="\t")
+.decl return_register(arch:symbol, reg:symbol)
+.input return_register(delimiter="\t")
+.decl call_mnemonic(arch:symbol, mnemonic:symbol)
+.input call_mnemonic(delimiter="\t")
+.decl branch_mnemonic(arch:symbol, mnemonic:symbol)
+.input branch_mnemonic(delimiter="\t")
+
+// LLM-extracted UVScan rule facts
+.decl rule_return_value(api:symbol, constraint:symbol, expected:symbol, source:symbol, confidence:symbol)
+.input rule_return_value(delimiter="\t")
+.decl rule_deprecated(api:symbol, expected:symbol, source:symbol, confidence:symbol)
+.input rule_deprecated(delimiter="\t")
+.decl rule_argument(api:symbol, arg_index:unsigned, operator:symbol, expected_value:symbol, expected:symbol, source:symbol, confidence:symbol)
+.input rule_argument(delimiter="\t")
+.decl rule_causality(api:symbol, must:symbol, before:symbol, window:unsigned, expected:symbol, source:symbol, confidence:symbol)
+.input rule_causality(delimiter="\t")
+.decl rule_resource_lifecycle(open_api:symbol, close_api:symbol, window:unsigned, expected:symbol, source:symbol, confidence:symbol)
+.input rule_resource_lifecycle(delimiter="\t")
+
+// Analysis support facts over ddisasm facts
+.decl return_check(call:address, api:symbol, check_addr:address, check_op:symbol, branch_addr:address, branch_op:symbol)
+.input return_check(delimiter="\t")
+.decl argument_value(call:address, api:symbol, arg_index:unsigned, observed_value:symbol, set_addr:address)
+.input argument_value(delimiter="\t")
+
+// v2 dataflow/handle/string fact skeletons.
+.decl return_value(call:address, api:symbol, value:symbol)
+.input return_value(delimiter="\t")
+.decl argument_symbol(call:address, api:symbol, arg_index:unsigned, symbol:symbol)
+.input argument_symbol(delimiter="\t")
+.decl api_returns_handle(call:address, api:symbol, handle:symbol)
+.input api_returns_handle(delimiter="\t")
+.decl api_consumes_handle(call:address, api:symbol, arg_index:unsigned, handle:symbol)
+.input api_consumes_handle(delimiter="\t")
+.decl handle_alias(h1:symbol, h2:symbol)
+.input handle_alias(delimiter="\t")
+.decl handle_escape(handle:symbol, kind:symbol)
+.input handle_escape(delimiter="\t")
+.decl string_literal(addr:address, value:symbol)
+.input string_literal(delimiter="\t")
+
+.decl tls_verify_api(api:symbol)
+tls_verify_api("SSL_CTX_set_verify").
+tls_verify_api("wolfSSL_CTX_set_verify").
+tls_verify_api("mbedtls_ssl_conf_authmode").
+
+.decl call_api(call:address, func:symbol, ordinal:unsigned, api:symbol, text:symbol)
+call_api(C,F,O,A,T) :- api_call(C,F,O,A,T).
+call_api(C,F,O,A,T) :- call_context(C,F,O,T), cfg_edge_to_symbol(C,A).
+call_api(C,F,O,A,T) :- call_context(C,F,O,T), direct_call(C,D), function_symbol(D,A).
+
+.decl causality_ok(call:address, api:symbol, must:symbol)
+causality_ok(C,A,M) :- rule_causality(A,M,"",W,_,_,_), call_api(C,F,O,A,_), call_api(_,F,O2,M,_), O2 > O, O2 <= O + W.
+causality_ok(C,A,M) :- rule_causality(A,M,B,W,_,_,_), B != "", call_api(C,F,O,A,_), call_api(_,F,OB,B,_), OB > O, OB <= O + W, call_api(_,F,OM,M,_), OM > O, OM < OB.
+causality_ok(C,A,M) :- rule_causality(A,M,B,W,_,_,_), B != "", call_api(C,F,O,A,_), !call_api(_,F,_,B,_), call_api(_,F,OM,M,_), OM > O, OM <= O + W.
+
+.decl handle_equiv(h1:symbol, h2:symbol)
+handle_equiv(H,H) :- api_returns_handle(_,_,H).
+handle_equiv(H1,H2) :- handle_alias(H1,H2).
+handle_equiv(H1,H2) :- handle_alias(H2,H1).
+
+.decl lifecycle_same_handle_ok(call:address, open_api:symbol, close_api:symbol)
+lifecycle_same_handle_ok(C,A,M) :-
+  rule_resource_lifecycle(A,M,W,_,_,_),
+  call_api(C,F,O,A,_),
+  api_returns_handle(C,A,H1),
+  api_consumes_handle(C2,M,_,H2),
+  call_api(C2,F,O2,M,_),
+  O2 > O,
+  O2 <= O + W,
+  handle_equiv(H1,H2).
+
+.decl datalog_violation(kind:symbol, call:address, api:symbol, checker:symbol, reason:symbol, evidence:symbol, expected:symbol, source:symbol, confidence:symbol)
+.output datalog_violation(delimiter="\t")
+
+// Deprecated API checker.
+datalog_violation("deprecated_api", C, A, "deprecated", "deprecated API appears at call site", T, E, S, Conf) :-
+  rule_deprecated(A,E,S,Conf), call_api(C,_,_,A,T).
+
+// Return-value checker.
+datalog_violation("missing_return_value_check", C, A, "return_value", "no compare/test of the return register was found near the call", "", E, S, Conf) :-
+  rule_return_value(A,_,E,S,Conf), call_api(C,_,_,A,_), return_check(C,A,0,"",0,"").
+
+datalog_violation("incorrect_return_value_check", C, A, "return_value", "branch checks only < 0, but the API treats <= 0 as error", Br, E, S, Conf) :-
+  rule_return_value(A,"error_le_zero",E,S,Conf), return_check(C,A,_,_,_,Br), (Br = "jl"; Br = "jnge"; Br = "js").
+
+datalog_violation("incorrect_return_value_check", C, A, "return_value", "branch condition is inconsistent with the API's < 0 error contract", Br, E, S, Conf) :-
+  rule_return_value(A,"error_lt_zero",E,S,Conf), return_check(C,A,_,_,_,Br), (Br = "jle"; Br = "jng"; Br = "je"; Br = "jz"; Br = "jne"; Br = "jnz").
+
+datalog_violation("weak_return_value_check", C, A, "return_value", "return register is compared/tested, but no nearby conditional branch was found", Op, E, S, Conf) :-
+  rule_return_value(A,"must_check",E,S,Conf), return_check(C,A,Check,Op,0,""), Check != 0.
+
+// Argument checker.
+datalog_violation("argument_violation", C, A, "argument", "observed argument value does not match rule", V, E, S, Conf) :-
+  rule_argument(A,I,"==",ExpectedValue,E,S,Conf), argument_value(C,A,I,V,_), V != ExpectedValue.
+
+datalog_violation("argument_violation", C, A, "argument", "observed forbidden argument value", V, E, S, Conf) :-
+  rule_argument(A,I,"!=",ForbiddenValue,E,S,Conf), argument_value(C,A,I,V,_), V = ForbiddenValue, !tls_verify_api(A).
+
+datalog_violation("tls_verification_disabled", C, A, "argument", "TLS peer verification is disabled by an argument value", V, E, S, Conf) :-
+  tls_verify_api(A), rule_argument(A,I,"!=",ForbiddenValue,E,S,Conf), argument_value(C,A,I,V,_), V = ForbiddenValue.
+
+// Causality / lifecycle checker.
+datalog_violation("causality_violation", C, A, "causality", "missing required call after API", M, E, S, Conf) :-
+  rule_causality(A,M,_,_,E,S,Conf), call_api(C,_,_,A,_), !causality_ok(C,A,M).
+
+// Same-handle lifecycle checker for return-owned handles.  This complements the
+// call-order causality rule: a later free/close of a different handle no longer
+// suppresses a resource-lifecycle finding when return-register dataflow can
+// identify the produced handle.
+datalog_violation("resource_lifecycle_violation", C, A, "resource_lifecycle", "owned handle/object is not released by the matching close/free API in the same function/window", M, E, S, Conf) :-
+  rule_resource_lifecycle(A,M,_,E,S,Conf), api_returns_handle(C,A,_), !lifecycle_same_handle_ok(C,A,M).

@@ -1,0 +1,62 @@
+{
+  "library": "dropbear",
+  "component_type": "application_component",
+  "aliases": [
+    "Dropbear",
+    "dropbear",
+    "dropbearmulti",
+    "dbclient"
+  ],
+  "version_hints": [
+    {
+      "pattern": "Dropbear[^0-9]*([0-9]{4}\\.[0-9]+|[0-9]+\\.[0-9.]+)",
+      "evidence": "Dropbear version banner"
+    },
+    {
+      "pattern": "dropbearmulti",
+      "evidence": "multi-call binary marker"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Dropbear SSH project",
+      "url": "https://matt.ucc.asn.au/dropbear/dropbear.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "Dropbear source repository",
+      "url": "https://github.com/mkj/dropbear",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "dropbear-component-id",
+      "type": "component_only",
+      "expected": "Identify Dropbear/dropbearmulti version banners. Do not report API misuse without concrete symbol-level internal API evidence.",
+      "evidence_summary": "Dropbear is normally shipped as SSH server/client applications in firmware rather than as a public C API.",
+      "source_url": "https://matt.ucc.asn.au/dropbear/dropbear.html",
+      "confidence": 0.9,
+      "active": false,
+      "tags": [
+        "component",
+        "version"
+      ]
+    },
+    {
+      "id": "dropbear-buffer-free-manual",
+      "type": "component_internal_note",
+      "expected": "Potential internal allocation/free rules require build-specific symbol evidence; keep as manual RAG context only.",
+      "evidence_summary": "Dropbear internals are often statically linked/stripped in firmware, so generic API misuse rules have high false-positive risk.",
+      "source_url": "https://github.com/mkj/dropbear",
+      "confidence": 0.62,
+      "active": false,
+      "tags": [
+        "manual-review",
+        "not-active"
+      ]
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

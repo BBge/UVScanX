@@ -1,0 +1,44 @@
+{
+  "library": "libpcap",
+  "component_type": "library",
+  "aliases": [
+    "libpcap",
+    "pcap_",
+    "libpcap.so"
+  ],
+  "version_hints": [
+    {
+      "pattern": "libpcap(?: version)?\\s*([0-9]+\\.[0-9.]+)",
+      "evidence": "libpcap version banner"
+    }
+  ],
+  "sources": [
+    {
+      "title": "pcap_activate man page",
+      "url": "https://www.tcpdump.org/manpages/pcap_activate.3pcap.html",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "libpcap-pcap-activate-lt-zero",
+      "type": "return_value",
+      "api": "pcap_activate",
+      "constraint": "error_lt_zero",
+      "expected": "Treat only negative return values as errors; positive values are warnings.",
+      "evidence_summary": "pcap_activate returns 0 on success, negative error codes on failure, and positive warning codes.",
+      "source_url": "https://www.tcpdump.org/manpages/pcap_activate.3pcap.html",
+      "confidence": 0.97,
+      "active": true,
+      "tags": [
+        "return",
+        "capture"
+      ],
+      "severity": "medium",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

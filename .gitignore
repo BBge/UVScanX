@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtualenv / packaging
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# UVScanX generated outputs
+runs/
+artifacts/
+archive_unrelated/
+
+# Firmware downloads and extracted rootfs trees are large/generated.
+data/firmware/
+data/rootfs/
+data/rootfs-*/
+
+# Generated RAG index; keep directory placeholder only.
+data/rag/index/*
+!data/rag/index/.gitkeep
+
+# Synthetic ELF binaries are generated from examples/synthetic/*.s.
+examples/synthetic/bin/
+
+# Local dependency/bootstrap/build caches.
+tools/
+
+# Accidental shell redirection artifacts.
+=*

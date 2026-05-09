@@ -1,0 +1,179 @@
+{
+  "library": "OpenSSL",
+  "component_type": "library",
+  "aliases": [
+    "OpenSSL",
+    "libssl.so",
+    "libcrypto.so",
+    "SSL_",
+    "RAND_",
+    "ASN1_"
+  ],
+  "version_hints": [
+    {
+      "pattern": "OpenSSL\\s+([0-9][A-Za-z0-9.\\-a-z]*)",
+      "evidence": "OpenSSL version banner"
+    },
+    {
+      "pattern": "lib(?:ssl|crypto)\\.so\\.([0-9][0-9.]*)",
+      "evidence": "SONAME"
+    }
+  ],
+  "sources": [
+    {
+      "title": "OpenSSL SSL_read",
+      "url": "https://docs.openssl.org/master/man3/SSL_read/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "OpenSSL SSL_write",
+      "url": "https://docs.openssl.org/master/man3/SSL_write/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "OpenSSL verification APIs",
+      "url": "https://docs.openssl.org/master/man3/SSL_CTX_set_verify/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "OpenSSL RAND_pseudo_bytes",
+      "url": "https://docs.openssl.org/1.1.1/man3/RAND_bytes/",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "openssl-ssl-write-le-zero",
+      "type": "return_value",
+      "api": "SSL_write",
+      "constraint": "error_le_zero",
+      "expected": "Treat return <= 0 as error; success is > 0.",
+      "evidence_summary": "SSL_write returns a positive byte count on success and non-positive values require SSL_get_error handling.",
+      "source_url": "https://docs.openssl.org/master/man3/SSL_write/",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-ssl-read-le-zero",
+      "type": "return_value",
+      "api": "SSL_read",
+      "constraint": "error_le_zero",
+      "expected": "Treat return <= 0 as error; success is > 0.",
+      "evidence_summary": "SSL_read returns a positive byte count on success and non-positive values require SSL_get_error handling.",
+      "source_url": "https://docs.openssl.org/master/man3/SSL_read/",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-asn1-string-to-utf8-lt-zero",
+      "type": "return_value",
+      "api": "ASN1_STRING_to_UTF8",
+      "constraint": "error_lt_zero",
+      "expected": "Treat return < 0 as error; non-negative return is not an error.",
+      "evidence_summary": "ASN1_STRING_to_UTF8 returns the number of bytes or a negative value on error.",
+      "source_url": "https://docs.openssl.org/master/man3/ASN1_STRING_length/",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "return",
+        "asn1"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-peer-chain-null",
+      "type": "return_value",
+      "api": "SSL_get_peer_cert_chain",
+      "constraint": "non_null_required",
+      "expected": "Check for NULL before use/dereference.",
+      "evidence_summary": "Peer certificate chain accessors can return NULL.",
+      "source_url": "https://docs.openssl.org/master/man3/SSL_get_peer_cert_chain/",
+      "confidence": 0.92,
+      "active": true,
+      "tags": [
+        "return",
+        "x509"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-ctx-set-verify-before-connect",
+      "type": "causality",
+      "api": "SSL_new",
+      "must_call_after": "SSL_CTX_set_verify",
+      "before": "SSL_connect",
+      "window": 5,
+      "expected": "Configure peer verification before SSL_connect.",
+      "evidence_summary": "TLS peer verification mode should be configured before the client handshake.",
+      "source_url": "https://docs.openssl.org/master/man3/SSL_CTX_set_verify/",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "causality",
+        "tls-verification"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-rand-pseudo-deprecated",
+      "type": "deprecated",
+      "api": "RAND_pseudo_bytes",
+      "expected": "Deprecated OpenSSL API should not be used; use RAND_bytes where appropriate.",
+      "evidence_summary": "RAND_pseudo_bytes is deprecated in modern OpenSSL documentation.",
+      "source_url": "https://docs.openssl.org/1.1.1/man3/RAND_bytes/",
+      "confidence": 0.98,
+      "active": true,
+      "tags": [
+        "deprecated",
+        "crypto"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "openssl-ctx-set-verify-not-none",
+      "type": "argument",
+      "api": "SSL_CTX_set_verify",
+      "arg_index": 2,
+      "operator": "!=",
+      "value": 0,
+      "window": 10,
+      "expected": "Do not pass SSL_VERIFY_NONE as the verification mode for peers that require TLS certificate validation.",
+      "evidence_summary": "OpenSSL SSL_CTX_set_verify configures peer verification mode; SSL_VERIFY_NONE disables peer certificate verification.",
+      "source_url": "https://docs.openssl.org/master/man3/SSL_CTX_set_verify/",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "tls",
+        "verification",
+        "argument"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

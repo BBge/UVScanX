@@ -1,0 +1,152 @@
+{
+  "library": "libupnp",
+  "component_type": "library",
+  "aliases": [
+    "Portable SDK for UPnP",
+    "pupnp",
+    "libupnp.so",
+    "UpnpInit"
+  ],
+  "version_hints": [
+    {
+      "pattern": "libupnp[/ ]([0-9]+\\.[0-9.]+)",
+      "evidence": "libupnp version banner"
+    },
+    {
+      "pattern": "Portable SDK for UPnP[^0-9]*([0-9]+\\.[0-9.]+)",
+      "evidence": "pupnp banner"
+    },
+    {
+      "pattern": "libupnp\\.so\\.([0-9][0-9.]*)",
+      "evidence": "SONAME"
+    }
+  ],
+  "sources": [
+    {
+      "title": "pupnp API documentation",
+      "url": "https://pupnp.github.io/pupnp/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "pupnp source API declarations",
+      "url": "https://github.com/pupnp/pupnp",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "libupnp-init-check",
+      "type": "return_value",
+      "api": "UpnpInit",
+      "constraint": "must_check",
+      "expected": "Check UpnpInit return status before registering devices/clients.",
+      "evidence_summary": "libupnp initialization APIs return UPNP_E_SUCCESS on success or an error code.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "return",
+        "init"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libupnp-init2-check",
+      "type": "return_value",
+      "api": "UpnpInit2",
+      "constraint": "must_check",
+      "expected": "Check UpnpInit2 return status before registering devices/clients.",
+      "evidence_summary": "libupnp initialization APIs return status codes.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "return",
+        "init"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libupnp-init-finish",
+      "type": "resource_lifecycle",
+      "open_api": "UpnpInit",
+      "close_api": "UpnpFinish",
+      "window": 200,
+      "expected": "Shut down libupnp with UpnpFinish after successful initialization.",
+      "evidence_summary": "libupnp provides UpnpFinish as the SDK shutdown function.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.88,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "init"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libupnp-init2-finish",
+      "type": "resource_lifecycle",
+      "open_api": "UpnpInit2",
+      "close_api": "UpnpFinish",
+      "window": 200,
+      "expected": "Shut down libupnp with UpnpFinish after successful initialization.",
+      "evidence_summary": "libupnp provides UpnpFinish as the SDK shutdown function.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.88,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "init"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libupnp-register-client-unregister",
+      "type": "resource_lifecycle",
+      "open_api": "UpnpRegisterClient",
+      "close_api": "UpnpUnRegisterClient",
+      "window": 200,
+      "expected": "Unregister libupnp clients with UpnpUnRegisterClient before shutdown.",
+      "evidence_summary": "libupnp exposes registration/unregistration pairs for clients.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.82,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "registration"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    },
+    {
+      "id": "libupnp-register-root-unregister",
+      "type": "resource_lifecycle",
+      "open_api": "UpnpRegisterRootDevice",
+      "close_api": "UpnpUnRegisterRootDevice",
+      "window": 200,
+      "expected": "Unregister libupnp root devices with UpnpUnRegisterRootDevice before shutdown.",
+      "evidence_summary": "libupnp exposes registration/unregistration pairs for root devices.",
+      "source_url": "https://pupnp.github.io/pupnp/",
+      "confidence": 0.82,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "registration"
+      ],
+      "severity": "medium",
+      "noise_profile": "medium",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

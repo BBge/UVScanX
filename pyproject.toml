@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uvscanx"
+version = "0.1.0"
+description = "UVScanX upgraded firmware TPC usage violation scanner"
+requires-python = ">=3.10"
+dependencies = [
+  "openai>=1.0.0",
+  "pyelftools>=0.31",
+  "capstone>=5.0.0",
+  "pydantic>=2.0.0",
+  "rich>=13.0.0",
+  "pypdf>=4.0.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0.0"]
+
+[project.scripts]
+uvscanx = "uvscanx.cli:main"
+
+[tool.setuptools]
+packages = ["uvscanx"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [
+  "archive_unrelated",
+  "artifacts",
+  "data",
+  "runs",
+  "tools",
+  "examples/synthetic/bin",
+]

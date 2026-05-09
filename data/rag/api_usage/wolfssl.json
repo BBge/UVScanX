@@ -1,0 +1,148 @@
+{
+  "library": "wolfSSL",
+  "component_type": "library",
+  "aliases": [
+    "wolfSSL",
+    "libwolfssl.so"
+  ],
+  "version_hints": [
+    {
+      "pattern": "wolfSSL\\s+v?([0-9]+\\.[0-9.]+)",
+      "evidence": "wolfSSL version banner"
+    },
+    {
+      "pattern": "LIBWOLFSSL_VERSION_STRING[^0-9]*([0-9]+\\.[0-9.]+)",
+      "evidence": "version string/macro"
+    }
+  ],
+  "sources": [
+    {
+      "title": "wolfSSL Manual - SSL functions",
+      "url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__IO.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "wolfSSL Manual - SSL setup/free",
+      "url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__Setup.html",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "wolfssl-read-le-zero",
+      "type": "return_value",
+      "api": "wolfSSL_read",
+      "constraint": "error_le_zero",
+      "expected": "Treat return <= 0 as non-success and use wolfSSL_get_error/handling before using data.",
+      "evidence_summary": "wolfSSL_read reports positive bytes on success; non-positive values need error/closure handling.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__IO.html",
+      "confidence": 0.93,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "wolfssl-write-le-zero",
+      "type": "return_value",
+      "api": "wolfSSL_write",
+      "constraint": "error_le_zero",
+      "expected": "Treat return <= 0 as non-success and handle via wolfSSL_get_error.",
+      "evidence_summary": "wolfSSL_write reports positive bytes on success; non-positive values need error handling.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__IO.html",
+      "confidence": 0.93,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "wolfssl-connect-check",
+      "type": "return_value",
+      "api": "wolfSSL_connect",
+      "constraint": "must_check",
+      "expected": "Check wolfSSL_connect result before treating the TLS connection as established.",
+      "evidence_summary": "wolfSSL_connect returns a status code indicating handshake success/failure.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__IO.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "return",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "wolfssl-new-free",
+      "type": "resource_lifecycle",
+      "open_api": "wolfSSL_new",
+      "close_api": "wolfSSL_free",
+      "window": 120,
+      "expected": "Release WOLFSSL objects from wolfSSL_new with wolfSSL_free.",
+      "evidence_summary": "wolfSSL exposes wolfSSL_free to release session objects.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__Setup.html",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "wolfssl-ctx-new-free",
+      "type": "resource_lifecycle",
+      "open_api": "wolfSSL_CTX_new",
+      "close_api": "wolfSSL_CTX_free",
+      "window": 160,
+      "expected": "Release WOLFSSL_CTX objects with wolfSSL_CTX_free.",
+      "evidence_summary": "wolfSSL setup APIs pair context allocation and freeing functions.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__Setup.html",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "tls"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    },
+    {
+      "id": "wolfssl-ctx-set-verify-not-none",
+      "type": "argument",
+      "api": "wolfSSL_CTX_set_verify",
+      "arg_index": 2,
+      "operator": "!=",
+      "value": 0,
+      "window": 10,
+      "expected": "Do not pass SSL_VERIFY_NONE/0 as the verification mode when peer certificate validation is required.",
+      "evidence_summary": "wolfSSL_CTX_set_verify configures peer verification mode; mode 0 disables verification.",
+      "source_url": "https://www.wolfssl.com/documentation/manuals/wolfssl/group__Setup.html",
+      "confidence": 0.8,
+      "active": true,
+      "tags": [
+        "tls",
+        "verification",
+        "argument"
+      ],
+      "severity": "high",
+      "noise_profile": "low",
+      "default_enabled": true
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

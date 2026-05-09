@@ -1,0 +1,61 @@
+{
+  "library": "dnsmasq",
+  "component_type": "application_component",
+  "aliases": [
+    "dnsmasq",
+    "Dnsmasq"
+  ],
+  "version_hints": [
+    {
+      "pattern": "Dnsmasq version\\s+([0-9][A-Za-z0-9.\\-]*)",
+      "evidence": "dnsmasq version banner"
+    },
+    {
+      "pattern": "dnsmasq-([0-9]+\\.[0-9.]+)",
+      "evidence": "package/build string"
+    }
+  ],
+  "sources": [
+    {
+      "title": "dnsmasq project documentation",
+      "url": "https://thekelleys.org.uk/dnsmasq/doc.html",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "dnsmasq changelog",
+      "url": "https://thekelleys.org.uk/dnsmasq/CHANGELOG",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "dnsmasq-component-id",
+      "type": "component_only",
+      "expected": "Identify dnsmasq version/config evidence. Do not report C API misuse unless concrete internal API rules are added for a build.",
+      "evidence_summary": "dnsmasq is normally a daemon shipped as an application component, not a stable third-party C API used by other binaries.",
+      "source_url": "https://thekelleys.org.uk/dnsmasq/doc.html",
+      "confidence": 0.9,
+      "active": false,
+      "tags": [
+        "component",
+        "version",
+        "config-review"
+      ]
+    },
+    {
+      "id": "dnsmasq-config-review",
+      "type": "configuration_heuristic",
+      "expected": "For firmware audits, review dnsmasq command-line/config for unsafe DNS/DHCP exposure, but keep this separate from API usage-violation findings.",
+      "evidence_summary": "dnsmasq security posture depends heavily on runtime configuration and vendor patches.",
+      "source_url": "https://thekelleys.org.uk/dnsmasq/doc.html",
+      "confidence": 0.7,
+      "active": false,
+      "tags": [
+        "config-review",
+        "not-api-rule"
+      ]
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}

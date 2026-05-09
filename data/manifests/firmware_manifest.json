@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "name": "UVScanX firmware test set",
+    "note": "URLs are official/vendor or public vendor CDN links. SHA256 is filled after download if not known in advance. Use profile=full for all samples."
+  },
+  "firmware": [
+    {
+      "id": "dlink-dir880l-a1-1.07",
+      "vendor": "D-Link",
+      "product": "DIR-880L",
+      "device_type": "router",
+      "hardware_version": "A1",
+      "firmware_version": "1.07",
+      "published_date": "unknown/vendor CDN sample used by UVScan disclosure",
+      "url": "https://d2okd4tdjucp2n.cloudfront.net/DIR-880L/DIR-880L_A1_FW_1.07.zip",
+      "filename": "DIR-880L_A1_FW_1.07.zip",
+      "profiles": [
+        "smoke",
+        "full"
+      ],
+      "known_cases": [
+        "missing SSL_CTX_set_verify after SSL_new",
+        "missing sqlite3_close after sqlite3_open"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax73-v1-20240325",
+      "vendor": "TP-Link",
+      "product": "Archer AX73",
+      "device_type": "router",
+      "hardware_version": "V1",
+      "firmware_version": "1.3.6 Build 20240325",
+      "published_date": "2024-04-29",
+      "size_hint": "35.89 MB",
+      "url": "https://static.tp-link.com/upload/firmware/2024/202404/20240429/Archer AX73_V1_240325.zip",
+      "filename": "Archer_AX73_V1_240325.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax73/v1/#Firmware",
+      "profiles": [
+        "full"
+      ]
+    },
+    {
+      "id": "tplink-archer-ax90-v1.20-210903",
+      "vendor": "TP-Link",
+      "product": "Archer AX90",
+      "device_type": "router",
+      "hardware_version": "V1/V1.20",
+      "firmware_version": "210903",
+      "published_date": "2021-11-23",
+      "size_hint": "46.05 MB",
+      "url": "https://static.tp-link.com/upload/firmware/2021/202111/20211123/Archer AX90(US)_V1_210903.zip",
+      "filename": "Archer_AX90_US_V1_210903.zip",
+      "source_page": "https://www.tp-link.com/us/support/download/archer-ax90/v1.20/#Firmware",
+      "profiles": [
+        "full"
+      ],
+      "known_cases": [
+        "SSL_read/SSL_write return value check",
+        "pcap_activate return value check"
+      ]
+    },
+    {
+      "id": "tplink-vigi-c340-v2.20-250904",
+      "vendor": "TP-Link",
+      "product": "VIGI C340",
+      "device_type": "camera",
+      "hardware_version": "V2.20",
+      "firmware_version": "2.2.0 Build 250904",
+      "published_date": "2025-10-28",
+      "size_hint": "13.71 MB",
+      "url": "https://static.tp-link.com/upload/firmware/2025/202510/20251028/VIGI C340(UN) 2.20_2.2.0 Build 250904.zip",
+      "filename": "VIGI_C340_UN_2.20_2.2.0_Build_250904.zip",
+      "source_page": "https://www.tp-link.com/in/support/download/vigi-c340/#Firmware",
+      "profiles": [
+        "smoke",
+        "full"
+      ]
+    },
+    {
+      "id": "hikvision-ds-2cd-s3000525150-230831",
+      "vendor": "Hikvision",
+      "product": "DS-2CD series IP camera",
+      "device_type": "camera",
+      "hardware_version": "DS-2CD public firmware family",
+      "firmware_version": "V5.6.821_230831",
+      "published_date": "2023-09",
+      "url": "https://assets.hikvision.com/prd/public/all/files/202309/Firmware__V5.6.821_230831_S3000525150.zip",
+      "filename": "Hikvision_DS-2CD_Firmware_V5.6.821_230831.zip",
+      "source_page": "https://www.hikvision.com/us-en/support/download/firmware/",
+      "profiles": [
+        "full"
+      ],
+      "resolver": "hikvision_ds2cd"
+    }
+  ]
+}

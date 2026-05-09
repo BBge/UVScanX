@@ -1,0 +1,267 @@
+{
+  "library": "uClibc / glibc",
+  "component_type": "c_runtime",
+  "aliases": [
+    "glibc",
+    "GNU C Library",
+    "uClibc",
+    "libc.so",
+    "ld-uClibc.so"
+  ],
+  "version_hints": [
+    {
+      "pattern": "GLIBC_([0-9]+\\.[0-9.]+)",
+      "evidence": "GLIBC symbol version"
+    },
+    {
+      "pattern": "GNU C Library[^0-9]*([0-9]+\\.[0-9.]+)",
+      "evidence": "glibc banner"
+    },
+    {
+      "pattern": "uClibc(?:-ng)?\\s*([0-9]+\\.[0-9.]+)",
+      "evidence": "uClibc banner"
+    }
+  ],
+  "sources": [
+    {
+      "title": "GNU C Library Manual",
+      "url": "https://www.gnu.org/software/libc/manual/",
+      "accessed": "2026-05-09"
+    },
+    {
+      "title": "Linux man-pages: malloc/free/fopen/popen/dlopen/pthread_mutex_init",
+      "url": "https://man7.org/linux/man-pages/",
+      "accessed": "2026-05-09"
+    }
+  ],
+  "rules": [
+    {
+      "id": "libc-fopen-null",
+      "type": "return_value",
+      "api": "fopen",
+      "constraint": "non_null_required",
+      "expected": "Check fopen result for NULL before using the FILE pointer.",
+      "evidence_summary": "fopen returns a stream pointer or NULL on failure.",
+      "source_url": "https://man7.org/linux/man-pages/man3/fopen.3.html",
+      "confidence": 0.96,
+      "active": true,
+      "tags": [
+        "return",
+        "file"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-malloc-null",
+      "type": "return_value",
+      "api": "malloc",
+      "constraint": "non_null_required",
+      "expected": "Check malloc result before dereferencing in security-critical code.",
+      "evidence_summary": "malloc returns a pointer to allocated memory or NULL on allocation failure.",
+      "source_url": "https://man7.org/linux/man-pages/man3/malloc.3.html",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "return",
+        "allocation"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-calloc-null",
+      "type": "return_value",
+      "api": "calloc",
+      "constraint": "non_null_required",
+      "expected": "Check calloc result before dereferencing in security-critical code.",
+      "evidence_summary": "calloc returns allocated memory or NULL on allocation failure.",
+      "source_url": "https://man7.org/linux/man-pages/man3/malloc.3.html",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "return",
+        "allocation"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-realloc-null",
+      "type": "return_value",
+      "api": "realloc",
+      "constraint": "non_null_required",
+      "expected": "Check realloc result before replacing or dereferencing pointers; preserve the old pointer on failure.",
+      "evidence_summary": "realloc can fail and return NULL without freeing the original block.",
+      "source_url": "https://man7.org/linux/man-pages/man3/malloc.3.html",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "return",
+        "allocation"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-dlopen-null",
+      "type": "return_value",
+      "api": "dlopen",
+      "constraint": "non_null_required",
+      "expected": "Check dlopen result for NULL and inspect dlerror on failure.",
+      "evidence_summary": "dlopen returns a handle or NULL on failure.",
+      "source_url": "https://man7.org/linux/man-pages/man3/dlopen.3.html",
+      "confidence": 0.94,
+      "active": true,
+      "tags": [
+        "return",
+        "dynamic-loading"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-fopen-fclose",
+      "type": "resource_lifecycle",
+      "open_api": "fopen",
+      "close_api": "fclose",
+      "window": 160,
+      "expected": "Close FILE streams opened by fopen with fclose.",
+      "evidence_summary": "fclose closes a stream and releases associated resources.",
+      "source_url": "https://man7.org/linux/man-pages/man3/fclose.3.html",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "file"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-popen-pclose",
+      "type": "resource_lifecycle",
+      "open_api": "popen",
+      "close_api": "pclose",
+      "window": 160,
+      "expected": "Close streams opened by popen with pclose, not fclose.",
+      "evidence_summary": "pclose waits for the associated process and closes the pipe stream.",
+      "source_url": "https://man7.org/linux/man-pages/man3/popen.3.html",
+      "confidence": 0.95,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "process"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-dlopen-dlclose",
+      "type": "resource_lifecycle",
+      "open_api": "dlopen",
+      "close_api": "dlclose",
+      "window": 160,
+      "expected": "Release dynamic loader handles with dlclose when no longer needed.",
+      "evidence_summary": "dlclose decrements the reference count for a dlopen handle.",
+      "source_url": "https://man7.org/linux/man-pages/man3/dlopen.3.html",
+      "confidence": 0.9,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "dynamic-loading"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-malloc-free",
+      "type": "resource_lifecycle",
+      "open_api": "malloc",
+      "close_api": "free",
+      "window": 180,
+      "expected": "Free heap memory allocated with malloc/calloc/realloc/strdup when ownership is not transferred.",
+      "evidence_summary": "free releases allocated memory obtained from malloc-family APIs.",
+      "source_url": "https://man7.org/linux/man-pages/man3/malloc.3.html",
+      "confidence": 0.78,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "allocation",
+        "higher-fp-risk"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-calloc-free",
+      "type": "resource_lifecycle",
+      "open_api": "calloc",
+      "close_api": "free",
+      "window": 180,
+      "expected": "Free heap memory allocated with calloc when ownership is not transferred.",
+      "evidence_summary": "free releases allocated memory obtained from malloc-family APIs.",
+      "source_url": "https://man7.org/linux/man-pages/man3/malloc.3.html",
+      "confidence": 0.78,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "allocation",
+        "higher-fp-risk"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-strdup-free",
+      "type": "resource_lifecycle",
+      "open_api": "strdup",
+      "close_api": "free",
+      "window": 180,
+      "expected": "Free strings allocated by strdup/strndup when ownership is not transferred.",
+      "evidence_summary": "strdup returns newly allocated memory that can be released with free.",
+      "source_url": "https://man7.org/linux/man-pages/man3/strdup.3.html",
+      "confidence": 0.82,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "allocation",
+        "higher-fp-risk"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    },
+    {
+      "id": "libc-pthread-mutex-destroy",
+      "type": "resource_lifecycle",
+      "open_api": "pthread_mutex_init",
+      "close_api": "pthread_mutex_destroy",
+      "window": 200,
+      "expected": "Destroy dynamically initialized mutexes with pthread_mutex_destroy when no longer used.",
+      "evidence_summary": "POSIX mutexes initialized with pthread_mutex_init have a matching destroy function.",
+      "source_url": "https://man7.org/linux/man-pages/man3/pthread_mutex_init.3p.html",
+      "confidence": 0.86,
+      "active": true,
+      "tags": [
+        "lifecycle",
+        "pthread"
+      ],
+      "severity": "low",
+      "noise_profile": "high",
+      "default_enabled": false
+    }
+  ],
+  "schema_version": "uvscanx-rag-v1",
+  "last_reviewed": "2026-05-09"
+}
